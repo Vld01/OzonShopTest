@@ -35,6 +35,7 @@ public class InitManager {
      * @see DriverManager#quitDriver()
      */
     public static void quitFramework() {
+        PageManager.cleanListPage();
         quitDriver();
     }
 }

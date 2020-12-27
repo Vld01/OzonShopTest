@@ -1,23 +1,28 @@
 package ru.appline.framework.pages;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.appline.framework.managers.PageManager;
+import ru.appline.framework.utils.Product;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static ru.appline.framework.managers.DriverManager.getDriver;
+import static ru.appline.framework.managers.InitManager.props;
+import static ru.appline.framework.utils.PropConst.IMPLICITLY_WAIT;
 
 /**
- * Базовый класс всех страничек
+ * Базовый класс всех страниц
  */
 public class BasePage {
+    static List<Product> listProducts = new ArrayList<Product>();
 
     /**
      * Менеджер страниц
@@ -104,11 +109,19 @@ public class BasePage {
      * @param field - веб-елемент поле ввода
      * @param value - значение вводимое в поле
      */
-    public void fillInputField(WebElement field, int value) {
+    public void fillInputField(WebElement field, String value) {
         scrollToElementJs(field);
-        while (!field.getAttribute("value").isEmpty()) {
-            field.sendKeys(Keys.BACK_SPACE);
-        }
+        field.sendKeys(value);
+    }
+
+    /**
+     * Общий метод по заполнения полей ввода
+     *
+     * @param field - веб-елемент поле ввода
+     * @param value - значение вводимое в поле
+     */
+    public void fillInputField(WebElement field, Integer value) {
+        scrollToElementJs(field);
         field.sendKeys("" + value);
     }
 
@@ -169,6 +182,39 @@ public class BasePage {
      * @param value - значение для преобразования
      */
     public Integer utilParsInteger(String value) {
-        return Integer.parseInt(value.replaceAll(" ", "").replaceAll("₽", ""));
+        return Integer.parseInt(value.replaceAll("\\D",""));
     }
+
+    /**
+     * Проверка есть нет ли у товара пометки 'Express' и есть ли поле 'В корзину'
+     *
+     * @param elm - продукт у которого необходимо проверить пометку 'Express' и есть ли поле 'В корзину'
+     */
+    public boolean isElementCorrected(WebElement elm, String value) {
+        boolean expressLocated = false;
+        try {
+            getDriver().manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+            elm.findElement(By.xpath(".//*[text() = '" + value + "']"));
+            expressLocated = true;
+        } catch (NoSuchElementException | StaleElementReferenceException e) {
+            expressLocated = false;
+        } finally {
+            getDriver().manage().timeouts().implicitlyWait(Integer.parseInt(props.getProperty(IMPLICITLY_WAIT)), TimeUnit.SECONDS);
+        }
+        return expressLocated;
+    }
+
+    /**
+     * Проверка наличия всех товаров в корзине
+     *
+     * @param expectedProductsName - список добавленных продуктов со страницы поиска
+     * @param actualProductsName - список фактически добавленных продуктов в корзину
+     */
+    public boolean isContainsAllProducts(List<Product> expectedProductsName, List<String> actualProductsName) {
+        for (Product prod: expectedProductsName) {
+            if(!actualProductsName.contains(prod.getName())) return false;
+        }
+        return true;
+    }
+
 }

@@ -1,12 +1,19 @@
 package ru.appline.framework.managers;
 
-import ru.appline.framework.pages.DepositPage;
+import ru.appline.framework.pages.BasePage;
+import ru.appline.framework.pages.BasketPage;
+import ru.appline.framework.pages.SearchPage;
 import ru.appline.framework.pages.StartPage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Класс для управления страницами
  */
 public class PageManager {
+
+    private static List<BasePage> listPage = new ArrayList<>();
 
     /**
      * Менеджер страниц
@@ -16,13 +23,17 @@ public class PageManager {
     /**
      * Стартовая страница
      */
-    StartPage startPage;
+    static StartPage startPage;
 
     /**
-     * Страница ипотечного кредитования
+     * Страница поиска товара
      */
-    DepositPage depositPage;
+    static SearchPage searchPage;
 
+    /**
+     * Страница корзины
+     */
+    static BasketPage basketPage;
 
     /**
      * Конструктор специально сделал приватным (синглтон)
@@ -51,19 +62,47 @@ public class PageManager {
     public StartPage getStartPage() {
         if (startPage == null) {
             startPage = new StartPage();
+            listPage.add(startPage);
         }
         return startPage;
     }
 
     /**
-     * Ленивая инициализация {@link DepositPage}
+     * Ленивая инициализация {@link ru.appline.framework.pages.SearchPage}
      *
-     * @return DepositPage
+     * @return SearchPage
      */
-    public DepositPage getDepositPage() {
-        if (depositPage == null) {
-            depositPage = new DepositPage();
+    public SearchPage getSearchPage() {
+        if (searchPage == null) {
+            searchPage = new SearchPage();
+            listPage.add(searchPage);
         }
-        return depositPage;
+        return searchPage;
+    }
+
+
+    /**
+     * Ленивая инициализация {@link ru.appline.framework.pages.BasketPage}
+     *
+     * @return BasketPage
+     */
+    public BasketPage getBasketPage() {
+        if (basketPage == null) {
+            basketPage = new BasketPage();
+            listPage.add(basketPage);
+        }
+        return basketPage;
+    }
+
+    /**
+     *  Метод обнуления страниц в сессии
+     *
+     */
+    public static void cleanListPage() {
+         for (BasePage page: listPage) {
+             if (page != null) {
+                 page = null;
+             }
+         }
     }
 }

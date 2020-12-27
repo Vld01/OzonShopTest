@@ -1,22 +1,29 @@
 package ru.appline.framework.pages;
 
 import io.qameta.allure.Step;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static org.junit.Assert.*;
+
 
 public class StartPage extends BasePage {
-    @FindBy(xpath = "//div/div[text()='Вклады']/../a[@href='/contributions/']")
-    WebElement depositElement;
+    @FindBy(xpath = "//input[@* = 'Искать на Ozon']")
+    WebElement searchElement;
 
     /**
-     * Функция выбора из подменю вклады
+     * Функция поиска продукта
      *
-     * @return DepositPage - т.е. переходим на страницу {@link DepositPage}
+     * @param nameProduct - наименование продукта
+     * @return SearchPage - т.е. переходим на страницу {@link ru.appline.framework.pages.SearchPage}
      */
-    @Step("Выбираем подменю вклады")
-    public DepositPage choiceDeposit(){
-        elementToBeClickable(depositElement).click();
-        return app.getDepositPage();
+    @Step("Поиск продукта '{nameProduct}'")
+    public SearchPage selectProductSearch(String nameProduct){
+        action.sendKeys(Keys.ESCAPE);
+        fillInputField(searchElement, nameProduct);
+        assertEquals("Наименование продукта " + nameProduct + " в графе поиск заполнено некорректно", nameProduct, searchElement.getAttribute("value"));
+        searchElement.sendKeys(Keys.ENTER);
+        return app.getSearchPage();
     }
 }
