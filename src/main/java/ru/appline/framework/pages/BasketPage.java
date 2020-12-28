@@ -75,11 +75,14 @@ public class BasketPage extends BasePage {
                 .max(Product::compareTo)
                 .get();
         try(FileWriter out = new FileWriter("src/main/resources/allProducts.txt", false)){
-            out.write("Продукт с максимальной ценой: " + product.getName() + ", его цена: " + product.getPrice() +  " ₽\n\n");
+            out.write("Продукт с максимальной ценой: \n" + product.getName() + ", его цена: " + product.getPrice() +  " ₽\n\n");
             out.write("Список товаров: \n");
             int i = 1;
             for (Product prod : listProducts) {
-                out.write("" + i + ". " + prod.getName() + ", цена: " + prod.getPrice() + " ₽\n");
+                out.write("" + i + ". " +
+                        prod.getName() + ", цена: " +
+                        prod.getPrice() + " ₽\n");
+                i++;
             }
              Allure.addAttachment("Файл со списком товаров:", "text/html", new ByteArrayInputStream(Files.readAllBytes(Paths.get("src/main/resources/allProducts.txt"))), "text");
         } catch (IOException e) {

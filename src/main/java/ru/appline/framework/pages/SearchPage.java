@@ -147,6 +147,9 @@ public class SearchPage extends BasePage {
         return app.getBasketPage();
     }
 
+    /**
+     * Метод открытия всплывающего окна брендов
+     */
     public void viewAllBrandsElements(){
         try {
             getDriver().manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
@@ -159,6 +162,9 @@ public class SearchPage extends BasePage {
         }
     }
 
+    /**
+     * Метод ожидания наименования фильтра поиска сверху над товарами
+     */
     public void utilWaitSearchFiltersElement (String s){
         int i = 0;
         scrollToElementJs(searchFiltersElement);

@@ -21,7 +21,7 @@ public class Steps {
     @Когда("^Выполняем поиск продукта '(.*)'$")
     public void selectProductSearch(String nameProduct) {app.getStartPage().selectProductSearch(nameProduct);}
 
-    @Когда("^Ограничение цены до '(.*)'$")
+    @Когда("^Ограничение цены до '(\\d+)'$")
     public void clickProductSearch(Integer upLimit) {app.getSearchPage().clickProductSearch(upLimit);}
 
     @Когда("^Заполняем поле значением$")
@@ -32,11 +32,11 @@ public class Steps {
                 });
     }
 
-    @Когда("^Добавляем в корзину первые '(.*)' четных товара(ов)$")
-    public void fillCheckbox(int countProduct) {app.getSearchPage().fillCheckbox(countProduct); }
+    @Когда("^Добавляем в корзину первые '(\\d+)' четных товара$")
+    public void fillCheckbox(Integer countProduct) {app.getSearchPage().fillCheckbox(countProduct); }
 
-    @Тогда("^Проверяем наличие '(.*)' товаров в корзине$")
-    public void checkProductsInBasket(int countProduct) { app.getBasketPage().checkProductsInBasket(countProduct);}
+    @Тогда("^Проверяем наличие '(\\d+)' товаров в корзине$")
+    public void checkProductsInBasket(Integer countProduct) { app.getBasketPage().checkProductsInBasket(countProduct);}
 
     @Тогда("^Добавлеем в отчет Аллюра текстовый файл$")
     public void addTextFile() { app.getBasketPage().addTextFile();}
