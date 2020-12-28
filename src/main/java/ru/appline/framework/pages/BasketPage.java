@@ -48,6 +48,7 @@ public class BasketPage extends BasePage {
      */
      @Step("Проверяем наличие '{countProduct}' товаров в корзине")
      public BasketPage checkProductsInBasket(int countProduct) {
+         explicitWait(2500);
          assertEquals("Количество товаров не соответствует", listProducts.size(), productNameElements.size());
          List<String> actualProductsName = new ArrayList<>();
          for (WebElement element: productNameElements) {

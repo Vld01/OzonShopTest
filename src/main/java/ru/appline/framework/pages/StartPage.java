@@ -12,6 +12,9 @@ public class StartPage extends BasePage {
     @FindBy(xpath = "//input[@* = 'Искать на Ozon']")
     WebElement searchElement;
 
+    @FindBy(xpath = "//div[text() = 'Везите скорее']/../../../../..//button[@type = 'button']/div")
+    WebElement closeButton;
+
     /**
      * Функция поиска продукта
      *
@@ -20,7 +23,7 @@ public class StartPage extends BasePage {
      */
     @Step("Поиск продукта '{nameProduct}'")
     public SearchPage selectProductSearch(String nameProduct){
-        action.sendKeys(Keys.ESCAPE);
+        elementToBeClickable(closeButton).click();
         fillInputField(searchElement, nameProduct);
         assertEquals("Наименование продукта " + nameProduct + " в графе поиск заполнено некорректно", nameProduct, searchElement.getAttribute("value"));
         searchElement.sendKeys(Keys.ENTER);
