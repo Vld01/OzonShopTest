@@ -16,13 +16,13 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
 import static ru.appline.framework.managers.DriverManager.getDriver;
 import static ru.appline.framework.managers.InitManager.props;
+import static ru.appline.framework.utils.Product.*;
 import static ru.appline.framework.utils.PropConst.IMPLICITLY_WAIT;
 
 /**
  * Базовый класс всех страниц
  */
 public class BasePage {
-    static List<Product> listProducts = new ArrayList<Product>();
 
     /**
      * Менеджер страниц

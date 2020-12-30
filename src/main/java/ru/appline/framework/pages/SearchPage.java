@@ -1,6 +1,5 @@
 package ru.appline.framework.pages;
 
-import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
@@ -13,10 +12,13 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.*;
 import static ru.appline.framework.managers.DriverManager.getDriver;
 import static ru.appline.framework.managers.InitManager.props;
+import static ru.appline.framework.utils.Product.listProducts;
 import static ru.appline.framework.utils.PropConst.IMPLICITLY_WAIT;
 
 
 public class SearchPage extends BasePage {
+    private final static String NAME_PAGE = "SearchPage";
+
     @FindBy(xpath = "//div[contains (text(), 'Цена')]/..//p[contains (text(), 'до')]/../input")
     WebElement searchUpLimitElement;
 
@@ -61,7 +63,6 @@ public class SearchPage extends BasePage {
      * @param upLimit - верхняя граница цены
      * @return SearchPage - т.е. остаемся на этой странице
      */
-    @Step("Ограничение цены до '{upLimit}")
     public SearchPage clickProductSearch(Integer upLimit){
         scrollToElementJs(searchUpLimitElement);
         while (!searchUpLimitElement.getAttribute("value").isEmpty()) {
@@ -81,7 +82,6 @@ public class SearchPage extends BasePage {
      * @param nameField - имя веб элемента, поля ввода
      * @return SearchPage - т.е. остаемся на этой странице
      */
-    @Step("Заполняем поле '{nameField}' значением '{value}'")
     public SearchPage fillCheckbox(String nameField, String value) {
         WebElement element = null;
         switch (nameField) {
@@ -114,7 +114,7 @@ public class SearchPage extends BasePage {
             try{
                 wait.until(ExpectedConditions.attributeContains(element, "checked", value));
                 utilWaitSearchFiltersElement(nameField); //ожидалка в цикле своя отмечен или не отмечен
-            } catch (TimeoutException e){
+            } catch (TimeoutException | StaleElementReferenceException e ){
                 fail("Элемент '"+ nameField +"' не был установлен в необходимое значение " + value);
             }
         }
@@ -127,7 +127,6 @@ public class SearchPage extends BasePage {
      * @param countProduct - количество добавляемых продуктов
      * @return BasketPage -  т.е. переходим на страницу {@link ru.appline.framework.pages.BasketPage}
      */
-    @Step("Добавляем в корзину первые '{countProduct}' четных товара(ов)")
     public BasketPage fillCheckbox(Integer countProduct) {
         String nameProduct = "";
         int priceProduct = 0;
@@ -167,10 +166,10 @@ public class SearchPage extends BasePage {
      */
     public void utilWaitSearchFiltersElement (String s){
         int i = 0;
-        scrollToElementJs(searchFiltersElement);
         boolean isPresentText = false;
         while (!isPresentText && i < 20) {
             try {
+                scrollToElementJs(searchFiltersElement);
                 isPresentText = searchFiltersElement.getText().replaceAll("[^A-Za-zА-Яа-я0-9]", "").contains(s);
                 explicitWait(500);
                 i++;

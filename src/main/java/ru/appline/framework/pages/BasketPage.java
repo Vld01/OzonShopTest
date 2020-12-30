@@ -1,7 +1,6 @@
 package ru.appline.framework.pages;
 
 import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.appline.framework.utils.Product;
@@ -15,8 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static ru.appline.framework.utils.Product.listProducts;
 
 public class BasketPage extends BasePage {
+    private final static String NAME_PAGE = "BasketPage";
+
     @FindBy(xpath = "//span[contains(text(), 'Удалить')]/../../a/span")
     List<WebElement> productNameElements;
 
@@ -35,8 +37,6 @@ public class BasketPage extends BasePage {
     @FindBy(xpath = "//*[contains(text(), 'Удаление товаров')]/..//div[text() = 'Удалить']/../..")
     WebElement subWindowDeleteButton;
 
-
-
     @FindBy(xpath = "//*[contains(text(), 'Корзина пуста')]")
     List<WebElement> basketIsEmptyElement;
 
@@ -46,7 +46,6 @@ public class BasketPage extends BasePage {
      *
      * @return BasketPage - т.е. остаемся на этой странице
      */
-     @Step("Проверяем наличие '{countProduct}' товаров в корзине")
      public BasketPage checkProductsInBasket(int countProduct) {
          explicitWait(2500);
          assertEquals("Количество товаров не соответствует", listProducts.size(), productNameElements.size());
@@ -70,7 +69,6 @@ public class BasketPage extends BasePage {
      *
      * @return BasketPage - т.е. остаемся на этой странице
      */
-    @Step("Функция добавления в отчет Аллюра текстового файла")
     public BasketPage addTextFile() {
         Product product = listProducts.stream()
                 .max(Product::compareTo)
@@ -80,15 +78,13 @@ public class BasketPage extends BasePage {
             out.write("Список товаров: \n");
             int i = 1;
             for (Product prod : listProducts) {
-                out.write("" + i + ". " +
-                        prod.getName() + ", цена: " +
-                        prod.getPrice() + " ₽\n");
+                out.write("" + i + prod.toString());
                 i++;
             }
-             Allure.addAttachment("Файл со списком товаров:", "text/html", new ByteArrayInputStream(Files.readAllBytes(Paths.get("src/main/resources/allProducts.txt"))), "text");
-        } catch (IOException e) {
+       } catch (IOException e) {
             e.printStackTrace();
         }
+        Allure.addAttachment("Файл со списком товаров:", "text/plain", new ByteArrayInputStream(getBytes()), "text");
         return this;
     }
 
@@ -97,12 +93,20 @@ public class BasketPage extends BasePage {
       *
       * @return BasketPage - т.е. остаемся на этой странице
       */
-     @Step("Удаляем все товары из корзины")
      public BasketPage deleteAllProducts() {
          elementToBeClickable(deleteAllProductsElement).click();
          assertFalse(subWindowDeleteElement.isEmpty());
          elementToBeClickable(subWindowDeleteButton).click();
          assertFalse("Нет сообщения о том что корзина пуста", basketIsEmptyElement.isEmpty());
          return this;
+     }
+
+     public byte[] getBytes() {
+         try {
+             return Files.readAllBytes(Paths.get("src/main/resources/allProducts.txt"));
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+         return new byte[0];
      }
 }

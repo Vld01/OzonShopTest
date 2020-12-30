@@ -6,6 +6,7 @@ import ru.appline.framework.pages.SearchPage;
 import ru.appline.framework.pages.StartPage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,27 +14,12 @@ import java.util.List;
  */
 public class PageManager {
 
-    private static List<BasePage> listPage = new ArrayList<>();
+    private static HashMap<String, BasePage> mapPage = new HashMap<>();
 
     /**
      * Менеджер страниц
      */
     private static PageManager pageManager;
-
-    /**
-     * Стартовая страница
-     */
-    static StartPage startPage;
-
-    /**
-     * Страница поиска товара
-     */
-    static SearchPage searchPage;
-
-    /**
-     * Страница корзины
-     */
-    static BasketPage basketPage;
 
     /**
      * Конструктор специально сделал приватным (синглтон)
@@ -60,11 +46,10 @@ public class PageManager {
      * @return StartPage
      */
     public StartPage getStartPage() {
-        if (startPage == null) {
-            startPage = new StartPage();
-            listPage.add(startPage);
+        if (mapPage.isEmpty() | mapPage.get("StartPage") == null) {
+            mapPage.put("StartPage", new StartPage());
         }
-        return startPage;
+        return (StartPage) mapPage.get("StartPage");
     }
 
     /**
@@ -73,11 +58,10 @@ public class PageManager {
      * @return SearchPage
      */
     public SearchPage getSearchPage() {
-        if (searchPage == null) {
-            searchPage = new SearchPage();
-            listPage.add(searchPage);
+        if (mapPage.isEmpty() | mapPage.get("SearchPage") == null) {
+            mapPage.put("SearchPage", new SearchPage());
         }
-        return searchPage;
+        return (SearchPage) mapPage.get("SearchPage");
     }
 
 
@@ -87,22 +71,17 @@ public class PageManager {
      * @return BasketPage
      */
     public BasketPage getBasketPage() {
-        if (basketPage == null) {
-            basketPage = new BasketPage();
-            listPage.add(basketPage);
+        if (mapPage.isEmpty() | mapPage.get("BasketPage") == null) {
+            mapPage.put("BasketPage", new BasketPage());
         }
-        return basketPage;
+        return (BasketPage) mapPage.get("BasketPage");
     }
 
     /**
      *  Метод обнуления страниц в сессии
      *
      */
-    public static void cleanListPage() {
-         for (BasePage page: listPage) {
-             if (page != null) {
-                 page = null;
-             }
-         }
+    public static void cleanMapPage() {
+        mapPage.clear();
     }
 }

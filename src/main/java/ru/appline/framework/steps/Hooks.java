@@ -1,4 +1,4 @@
-package ru.appline.steps;
+package ru.appline.framework.steps;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;

@@ -1,4 +1,4 @@
-package ru.appline.steps;
+package ru.appline.framework.steps;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.ru.Когда;
@@ -12,11 +12,6 @@ public class Steps {
      * @see PageManager#getPageManager()
      */
     private PageManager app = PageManager.getPageManager();
-
-    @Когда("^Загружаем стартовую страницу$")
-    public void getInitialPage(){
-        app.getStartPage();
-    }
 
     @Когда("^Выполняем поиск продукта '(.*)'$")
     public void selectProductSearch(String nameProduct) {app.getStartPage().selectProductSearch(nameProduct);}
@@ -33,7 +28,7 @@ public class Steps {
     }
 
     @Когда("^Добавляем в корзину первые '(\\d+)' четных товара$")
-    public void fillCheckbox(Integer countProduct) {app.getSearchPage().fillCheckbox(countProduct); }
+    public void fillCheckbox(Integer countProduct) {app.getSearchPage().fillCheckbox(countProduct);}
 
     @Тогда("^Проверяем наличие '(\\d+)' товаров в корзине$")
     public void checkProductsInBasket(Integer countProduct) { app.getBasketPage().checkProductsInBasket(countProduct);}

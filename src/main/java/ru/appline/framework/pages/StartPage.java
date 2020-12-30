@@ -1,6 +1,5 @@
 package ru.appline.framework.pages;
 
-import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +8,8 @@ import static org.junit.Assert.*;
 
 
 public class StartPage extends BasePage {
+    private final static String NAME_PAGE = "StartPage";
+
     @FindBy(xpath = "//input[@* = 'Искать на Ozon']")
     WebElement searchElement;
 
@@ -21,7 +22,6 @@ public class StartPage extends BasePage {
      * @param nameProduct - наименование продукта
      * @return SearchPage - т.е. переходим на страницу {@link ru.appline.framework.pages.SearchPage}
      */
-    @Step("Поиск продукта '{nameProduct}'")
     public SearchPage selectProductSearch(String nameProduct){
         elementToBeClickable(closeButton).click();
         fillInputField(searchElement, nameProduct);

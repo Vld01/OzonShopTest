@@ -1,9 +1,12 @@
 package ru.appline.framework.managers;
 
+import ru.appline.framework.utils.Product;
+
 import java.util.concurrent.TimeUnit;
 
 import static ru.appline.framework.managers.DriverManager.getDriver;
 import static ru.appline.framework.managers.DriverManager.quitDriver;
+import static ru.appline.framework.utils.Product.*;
 import static ru.appline.framework.utils.PropConst.*;
 
 /**
@@ -35,7 +38,8 @@ public class InitManager {
      * @see DriverManager#quitDriver()
      */
     public static void quitFramework() {
-        PageManager.cleanListPage();
+        PageManager.cleanMapPage();
+        listProducts.clear();
         quitDriver();
     }
 }
